@@ -6,10 +6,12 @@
   // two predefined environments, 'backtesting' and 'live', feel free
   // to add more!
 
-  "environment": "backtesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
+  "environment": "qlive-paper", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
+  //"environment": "backtesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
 
   // algorithm class selector
-  "algorithm-type-name": "BasicTemplateFrameworkAlgorithm",
+  //"algorithm-type-name": "BasicTemplateFrameworkAlgorithm",
+  "algorithm-type-name": "DipExploiter",
 
   // Algorithm language selector - options CSharp, FSharp, VisualBasic, Python, Java
   "algorithm-language": "CSharp",
@@ -58,8 +60,8 @@
   "transaction-log": "",
 
   // To get your api access token go to quantconnect.com/account
-  "job-user-id": "0",
-  "api-access-token": "",
+  "job-user-id": "90421",
+  "api-access-token": "df86d8208e530978d78601045c43a6d5f3fdf20e78d2e6528ce3bb50b0e2be0d",
 
   // live data configuration
   "live-data-url": "ws://www.quantconnect.com/api/v2/live/data/",
@@ -150,6 +152,32 @@
       "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.FileSystemDataFeed",
       "real-time-handler": "QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler",
       "history-provider": "QuantConnect.Lean.Engine.HistoricalData.SubscriptionDataReaderHistoryProvider",
+      "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
+    },
+
+    "qbacktesting": {
+      "live-mode": false,
+
+      "setup-handler": "QuantConnect.Lean.Engine.Setup.ConsoleSetupHandler",
+      "result-handler": "QuantConnect.Lean.Engine.Results.BacktestingResultHandler",
+      "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerDataFeed",
+      "real-time-handler": "QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler",
+      "history-provider": "QuantConnect.Lean.Engine.HistoricalData.SubscriptionDataReaderHistoryProvider",
+      "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
+    },
+
+    "qlive-paper": {
+      "live-mode": true,
+
+      // the paper brokerage requires the BacktestingTransactionHandler
+      "live-mode-brokerage": "PaperBrokerage",
+
+      "setup-handler": "QuantConnect.Lean.Engine.Setup.BrokerageSetupHandler",
+      "result-handler": "QuantConnect.Lean.Engine.Results.LiveTradingResultHandler",
+      "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.LiveTradingDataFeed",
+      //"data-queue-handler": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerDataQueueHandler",
+      "data-queue-handler": "QuantConnect.Lean.Engine.DataFeeds.Queues.FakeDataQueue",
+      "real-time-handler": "QuantConnect.Lean.Engine.RealTime.LiveTradingRealTimeHandler",
       "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
     },
 
