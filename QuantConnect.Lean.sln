@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 15.0.0.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.Lean.Launcher", "Launcher\QuantConnect.Lean.Launcher.csproj", "{09E7B916-E58B-4021-BD8B-C10B4446E226}"
 EndProject
@@ -46,7 +46,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.Algorithm.Pyth
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.ToolBox", "ToolBox\QuantConnect.ToolBox.csproj", "{AC9A142C-B485-44D7-91FF-015C22C43D05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.VisualStudioPlugin", "VisualStudioPlugin\QuantConnect.VisualStudio17Plugin.csproj", "{5326A9FB-0270-4647-8C43-20C5607DB529}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.VisualStudio17Plugin", "VisualStudioPlugin\QuantConnect.VisualStudio17Plugin.csproj", "{5326A9FB-0270-4647-8C43-20C5607DB529}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.Jupyter", "Jupyter\QuantConnect.Jupyter.csproj", "{9561D14A-467E-40AD-928E-EE9F758D7D98}"
 EndProject
@@ -55,6 +55,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantConnect.Algorithm.Framework", "Algorithm.Framework\QuantConnect.Algorithm.Framework.csproj", "{75981418-7246-4B91-B136-482728E02901}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "QuantConnect.PythonToolbox", "PythonToolbox\QuantConnect.PythonToolbox.pyproj", "{1C47F4DB-2AFF-4FAE-9142-B33BE654A516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrawlerEngine.Utils", "..\git-vbs\QuantNG\MetaQrawler\QrawlerEngine.Utils\QrawlerEngine.Utils.csproj", "{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qrawler.Api", "..\git-vbs\QuantNG\MetaQrawler\Qrawler.Api\Qrawler.Api.csproj", "{FDFA2096-6BA3-43E4-A824-EFC84F842059}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Qrawler.Interfaces", "..\git-vbs\QuantNG\MetaQrawler\Qrawler.Interfaces\Qrawler.Interfaces.csproj", "{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrawlerEngine.Models", "..\git-vbs\QuantNG\MetaQrawler\QrawlerEngine.Models\QrawlerEngine.Models.csproj", "{B6C45155-D96B-4C72-A2C1-4E128928DD34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -208,8 +216,43 @@ Global
 		{1C47F4DB-2AFF-4FAE-9142-B33BE654A516}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{1C47F4DB-2AFF-4FAE-9142-B33BE654A516}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C47F4DB-2AFF-4FAE-9142-B33BE654A516}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Debug|x64.Build.0 = Debug|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Release|x64.ActiveCfg = Release|Any CPU
+		{B4D9F8B6-0DF5-49C7-A333-334A14A281B9}.Release|x64.Build.0 = Release|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Debug|x64.Build.0 = Debug|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Release|x64.ActiveCfg = Release|Any CPU
+		{FDFA2096-6BA3-43E4-A824-EFC84F842059}.Release|x64.Build.0 = Release|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Debug|x64.Build.0 = Debug|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Release|x64.ActiveCfg = Release|Any CPU
+		{6FD836DA-19E4-4E1D-A252-5C20C67C7FD1}.Release|x64.Build.0 = Release|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Debug|x64.Build.0 = Debug|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Release|x64.ActiveCfg = Release|Any CPU
+		{B6C45155-D96B-4C72-A2C1-4E128928DD34}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2C2EC0A-082C-4EC6-87C5-9C53AEE149C5}
 	EndGlobalSection
 EndGlobal
