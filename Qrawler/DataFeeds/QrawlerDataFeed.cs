@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading;
@@ -7,34 +6,32 @@ using QuantConnect.Data;
 using QuantConnect.Data.Market;
 using QuantConnect.Data.UniverseSelection;
 using QuantConnect.Interfaces;
+using QuantConnect.Lean.Engine.DataFeeds;
 using QuantConnect.Lean.Engine.DataFeeds.Enumerators;
 using QuantConnect.Lean.Engine.DataFeeds.Enumerators.Factories;
+using QuantConnect.Lean.Engine.DataFeeds.Qrawler;
 using QuantConnect.Lean.Engine.Results;
 using QuantConnect.Logging;
 using QuantConnect.Packets;
 using QuantConnect.Securities;
-using QuantConnect.Util;
 
-namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
+namespace QuantConnect.Qrawler.DataFeeds
 {
     /// <summary>
     /// Historical datafeed stream reader for processing files on a local disk.
     /// </summary>
     /// <remarks>Filesystem datafeeds are incredibly fast</remarks>
-    public class QrawlerDataFeed : IDataFeed, IDataQueueHandler
+    public class QrawlerDataFeed : IDataFeed
     {
         private IAlgorithm _algorithm;
         private IResultHandler _resultHandler;
         private IMapFileProvider _mapFileProvider;
         private IFactorFileProvider _factorFileProvider;
         private IDataProvider _dataProvider;
-        private LiveNodePacket _job;
         private SubscriptionCollection _subscriptions;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private UniverseSelection _universeSelection;
-        private SubscriptionDataReaderSubscriptionEnumeratorFactory _subscriptionFactory;
-
-        private List<Symbol> _subscribedSymbols = new List<Symbol>();
+        private HistoricalDataEnumeratorFactory _subscriptionFactory;
 
         /// <summary>
         /// Flag indicating the hander thread is completely finished and ready to dispose.
@@ -54,7 +51,6 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
             IDataFeedTimeProvider dataFeedTimeProvider)
         {
             _algorithm = algorithm;
-            _job = (LiveNodePacket)job;
             _resultHandler = resultHandler;
             _mapFileProvider = mapFileProvider;
             _factorFileProvider = factorFileProvider;
@@ -62,38 +58,20 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
             _subscriptions = subscriptionManager.DataFeedSubscriptions;
             _universeSelection = subscriptionManager.UniverseSelection;
             _cancellationTokenSource = new CancellationTokenSource();
-            _subscriptionFactory = new SubscriptionDataReaderSubscriptionEnumeratorFactory(
+            /*_subscriptionFactory
+                = new SubscriptionDataReaderSubscriptionEnumeratorFactory(
                 _resultHandler,
                 _mapFileProvider,
                 _factorFileProvider,
                 _dataProvider,
-                includeAuxiliaryData: true);
+                includeAuxiliaryData: true);*/
+            _subscriptionFactory = new HistoricalDataEnumeratorFactory();
 
             IsActive = true;
-            var threadCount = Math.Max(1, Math.Min(4, Environment.ProcessorCount - 3));
         }
 
         private Subscription CreateDataSubscription(SubscriptionRequest request)
         {
-            var enqueueable = new EnqueueableEnumerator<SubscriptionData>(true);
-            var exchangeHours = request.Security.Exchange.Hours;
-
-            var timeZoneOffsetProvider = new TimeZoneOffsetProvider(request.Security.Exchange.TimeZone, request.StartTimeUtc, request.EndTimeUtc);
-            var subscription = new Subscription(request, enqueueable, timeZoneOffsetProvider);
-
-            
-            var t = new TradeBar(new DateTime(2012, 1, 1), request.Security.Symbol, 1, 5, 6, 5, 4);
-            var subscriptionData = SubscriptionData.Create(subscription.Configuration, exchangeHours, subscription.OffsetProvider, t);
-            enqueueable.Enqueue(subscriptionData);
-
-            var t2 = new TradeBar(new DateTime(2012, 1, 2), request.Security.Symbol, 1, 5, 6, 5, 4);
-            var subscriptionData2 = SubscriptionData.Create(subscription.Configuration, exchangeHours, subscription.OffsetProvider, t);
-            enqueueable.Enqueue(subscriptionData2);
-
-            enqueueable.Stop();
-
-
-            return subscription;
             // ReSharper disable once PossibleMultipleEnumeration
             if (!request.TradableDays.Any())
             {
@@ -118,12 +96,9 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
         /// <returns>The created <see cref="Subscription"/> if successful, null otherwise</returns>
         public Subscription CreateSubscription(SubscriptionRequest request)
         {
-            Subscribe(_job, new[] { request.Security.Symbol });
-            return CreateDataSubscription(request);
-            /*            return request.IsUniverseSubscription
-                            ? CreateUniverseSubscription(request)
-                            : CreateDataSubscription(request);*/
-
+            return request.IsUniverseSubscription
+                ? CreateUniverseSubscription(request)
+                : CreateDataSubscription(request);
         }
 
         /// <summary>
@@ -140,7 +115,10 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
         /// <param name="request">The subscription request</param>
         private Subscription CreateUniverseSubscription(SubscriptionRequest request)
         {
-            throw new NotImplementedException("Universe not supported");
+            // define our data enumerator
+            var enumerator = GetEnumeratorFactory(request).CreateEnumerator(request, _dataProvider);
+
+            return SubscriptionUtils.CreateAndScheduleWorker(request, enumerator);
         }
 
         /// <summary>
@@ -175,7 +153,7 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
 
                     return new TimeTriggeredUniverseSubscriptionEnumeratorFactory(request.Universe as ITimeTriggeredUniverse, MarketHoursDatabase.FromDataFolder());
                 }
-                if (request.Configuration.Type == typeof (CoarseFundamental))
+                if (request.Configuration.Type == typeof(CoarseFundamental))
                 {
                     return new BaseDataCollectionSubscriptionEnumeratorFactory();
                 }
@@ -201,10 +179,9 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
             if (IsActive)
             {
                 IsActive = false;
-                Log.Trace("QarwlerDataFeed.Exit(): Start. Setting cancellation token...");
+                Log.Trace("FileSystemDataFeed.Exit(): Start. Setting cancellation token...");
                 _cancellationTokenSource.Cancel();
-                _subscriptionFactory?.DisposeSafely();
-                Log.Trace("QarwlerDataFeed.Exit(): Exit Finished.");
+                Log.Trace("FileSystemDataFeed.Exit(): Exit Finished.");
             }
         }
 
@@ -240,30 +217,6 @@ namespace QuantConnect.Lean.Engine.DataFeeds.Qrawler
             }
 
             return enumerator;
-        }
-
-        public IEnumerable<BaseData> GetNextTicks()
-        {
-            Decimal d = 123;
-            while (!_cancellationTokenSource.IsCancellationRequested)
-            {
-                foreach (var s in _subscribedSymbols)
-                {
-                    d += 3;
-                    var t = new Tick(new DateTime(2012, 1, 1), s, d, d + 0.3m);
-                    yield return t;
-                }
-            }
-        }
-
-        public void Subscribe(LiveNodePacket job, IEnumerable<Symbol> symbols)
-        {
-            _subscribedSymbols = symbols.ToList();
-        }
-
-        public void Unsubscribe(LiveNodePacket job, IEnumerable<Symbol> symbols)
-        {
-            _subscribedSymbols.Clear();
         }
     }
 }

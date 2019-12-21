@@ -6,18 +6,30 @@
   // two predefined environments, 'backtesting' and 'live', feel free
   // to add more!
 
+  "qrawler": {
+    "url_live": "ws://192.168.2.232:7772/live",
+    "url_historical": "http://192.168.2.232:6678/historical",
+    //"url_live": "ws://127.0.0.1:7772/live",
+    //"url_historical": "http://127.0.0.1:6678/historical",
+    "feed-map": {
+      "GOD": "GodmodeTrader"
+    }
+  },
+
   "environment": "qlive-paper", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
   //"environment": "backtesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
+  //"environment": "qbacktesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
 
   // algorithm class selector
-  //"algorithm-type-name": "BasicTemplateFrameworkAlgorithm",
   "algorithm-type-name": "DipExploiter",
+  //"algorithm-type-name": "DipExploiter",
 
   // Algorithm language selector - options CSharp, FSharp, VisualBasic, Python, Java
   "algorithm-language": "CSharp",
 
   //Physical DLL location
-  "algorithm-location": "QuantConnect.Algorithm.CSharp.dll",
+  //"algorithm-location": "QuantConnect.Algorithm.CSharp.dll",
+  "algorithm-location": "QuantConnect.Qrawler.dll",
   //"algorithm-location": "../../../Algorithm.Python/BasicTemplateFrameworkAlgorithm.py",
   //"algorithm-location": "QuantConnect.Algorithm.FSharp.dll",
   //"algorithm-location": "QuantConnect.Algorithm.VisualBasic.dll",
@@ -36,10 +48,13 @@
   // handlers
   "log-handler": "QuantConnect.Logging.CompositeLogHandler",
   "messaging-handler": "QuantConnect.Messaging.Messaging",
+  //"messaging-handler": "QuantConnect.Messaging.StreamingMessageHandler",
+  "desktop-http-port": "6678",
   "job-queue-handler": "QuantConnect.Queues.JobQueue",
   "api-handler": "QuantConnect.Api.Api",
   "map-file-provider": "QuantConnect.Data.Auxiliary.LocalDiskMapFileProvider",
   "factor-file-provider": "QuantConnect.Data.Auxiliary.LocalDiskFactorFileProvider",
+  //"data-provider": "QuantConnect.Lean.Engine.DataFeeds.ApiDataProvider",
   "data-provider": "QuantConnect.Lean.Engine.DataFeeds.DefaultDataProvider",
   "alpha-handler": "QuantConnect.Lean.Engine.Alphas.DefaultAlphaHandler",
   "data-channel-provider": "DataChannelProvider",
@@ -162,7 +177,7 @@
       "result-handler": "QuantConnect.Lean.Engine.Results.BacktestingResultHandler",
       "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerDataFeed",
       "real-time-handler": "QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler",
-      "history-provider": "QuantConnect.Lean.Engine.HistoricalData.SubscriptionDataReaderHistoryProvider",
+      "history-provider": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerHistoryProvider",
       "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
     },
 
@@ -175,8 +190,8 @@
       "setup-handler": "QuantConnect.Lean.Engine.Setup.BrokerageSetupHandler",
       "result-handler": "QuantConnect.Lean.Engine.Results.LiveTradingResultHandler",
       "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.LiveTradingDataFeed",
-      //"data-queue-handler": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerDataQueueHandler",
-      "data-queue-handler": "QuantConnect.Lean.Engine.DataFeeds.Queues.FakeDataQueue",
+      "data-queue-handler": "QuantConnect.Qrawler.DataFeeds.QrawlerDataQueueHandler",
+      //"data-queue-handler": "QuantConnect.Lean.Engine.DataFeeds.Queues.FakeDataQueue",
       "real-time-handler": "QuantConnect.Lean.Engine.RealTime.LiveTradingRealTimeHandler",
       "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
     },
