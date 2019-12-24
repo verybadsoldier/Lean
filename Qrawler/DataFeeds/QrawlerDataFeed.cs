@@ -31,7 +31,7 @@ namespace QuantConnect.Qrawler.DataFeeds
         private SubscriptionCollection _subscriptions;
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private UniverseSelection _universeSelection;
-        private HistoricalDataEnumeratorFactory _subscriptionFactory;
+        private ISubscriptionEnumeratorFactory _subscriptionFactory;
 
         /// <summary>
         /// Flag indicating the hander thread is completely finished and ready to dispose.

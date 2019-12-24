@@ -5,7 +5,7 @@ namespace QuantConnect.Qrawler.DataFeeds
 {
     static class DataConverter
     {
-        public static TradeBar ToTradeBar(this Ohlc ohlc, Symbol symbol)
+        public static TradeBar ToTradeBar(this Ohlc ohlc, Symbol symbol, NodaTime.DateTimeZone dataTz)
         {
             // member intialization order is important here! (Time -> EndTime)
             var tb = new TradeBar()
@@ -16,8 +16,8 @@ namespace QuantConnect.Qrawler.DataFeeds
                 Low = ohlc.Low,
                 Close = ohlc.Close,
                 Volume = ohlc.Volume ?? 0,
-                Time = ohlc.StartTime.ToDateTimeUtc(),
-                EndTime = ohlc.Time.ToDateTimeUtc(),
+                Time = ohlc.StartTime.WithZone(dataTz).ToDateTimeUnspecified(),
+                EndTime = ohlc.Time.WithZone(dataTz).ToDateTimeUnspecified(),
             };
             return tb;
         }

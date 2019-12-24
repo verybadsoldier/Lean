@@ -52,6 +52,9 @@ namespace QuantConnect.Qrawler.DataFeeds
         {
             foreach(Symbol s in symbols)
             {
+                if (!s.Contains(":"))
+                    continue;
+
                 _symbolTranslator.Translate(s, out string qsymbol, out string qfeed);
                 _qlive.SubscribeSymbols(symbols.Select(x => new QSymbol(qsymbol, "*", qfeed)).ToList());
 

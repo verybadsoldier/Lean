@@ -16,9 +16,9 @@
     }
   },
 
-  "environment": "qlive-paper", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
+  //"environment": "qlive-paper", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
   //"environment": "backtesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
-  //"environment": "qbacktesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
+  "environment": "qbacktesting", // "live-paper", "backtesting", "live-interactive", "live-interactive-iqfeed"
 
   // algorithm class selector
   "algorithm-type-name": "DipExploiter",
@@ -175,9 +175,9 @@
 
       "setup-handler": "QuantConnect.Lean.Engine.Setup.ConsoleSetupHandler",
       "result-handler": "QuantConnect.Lean.Engine.Results.BacktestingResultHandler",
-      "data-feed-handler": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerDataFeed",
+      "data-feed-handler": "QuantConnect.Qrawler.DataFeeds.QrawlerDataFeed",
       "real-time-handler": "QuantConnect.Lean.Engine.RealTime.BacktestingRealTimeHandler",
-      "history-provider": "QuantConnect.Lean.Engine.DataFeeds.Qrawler.QrawlerHistoryProvider",
+      "history-provider": "QuantConnect.Qrawler.DataFeeds.QrawlerHistoryProvider",
       "transaction-handler": "QuantConnect.Lean.Engine.TransactionHandlers.BacktestingTransactionHandler"
     },
 

@@ -22,6 +22,7 @@ namespace QuantConnect.Qrawler.DataFeeds
                 Resolution = r.Configuration.Resolution;
                 StartTimeUtc = r.StartTimeUtc;
                 EndTimeUtc = r.EndTimeUtc;
+                DataTimeZone = r.Configuration.DataTimeZone;
             }
 
             public QHistoricalRequest(HistoryRequest r)
@@ -31,6 +32,7 @@ namespace QuantConnect.Qrawler.DataFeeds
                 Resolution = r.Resolution;
                 StartTimeUtc = r.StartTimeUtc;
                 EndTimeUtc = r.EndTimeUtc;
+                DataTimeZone = r.DataTimeZone;
             }
 
             public Symbol Symbol { get; set; }
@@ -38,6 +40,8 @@ namespace QuantConnect.Qrawler.DataFeeds
             public Resolution Resolution { get; set; }
             public DateTime StartTimeUtc { get; set; }
             public DateTime EndTimeUtc {get; set; }
+
+            public NodaTime.DateTimeZone DataTimeZone { get; set; }
         }
 
         public BaseData Current { get; set;  }
@@ -94,7 +98,7 @@ namespace QuantConnect.Qrawler.DataFeeds
             if (!_bars.MoveNext())
                 return false;
 
-            Current = _bars.Current.ToTradeBar(_request.Symbol);
+            Current = _bars.Current.ToTradeBar(_request.Symbol, _request.DataTimeZone);
 
             return true;
         }
